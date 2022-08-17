@@ -1,3 +1,7 @@
 asciinema
 pyte
 moviepy
+Pillow
+numpy
+fclist-cffi
+freetype-py
