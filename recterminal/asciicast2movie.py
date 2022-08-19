@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 '''
 generate movie (video clip) from asciicast
 
@@ -43,7 +41,7 @@ SOFTWARE.
 '''
 
 import pyte
-import tty2img
+from .tty2img import tty2img
 import moviepy.editor as mpy
 import numpy
 import io, json, math
@@ -106,17 +104,17 @@ def render_asciicast_frames(
 				# switch cursor
 				if cursor%2 == 0:
 					if imageCursorOn == None:
-						imageCursorOn = tty2img.tty2img(screen, showCursor=True, **renderOptions)
+						imageCursorOn = tty2img(screen, showCursor=True, **renderOptions)
 						imageCursorOn = mpy.ImageClip(numpy.array( imageCursorOn ))
 					imageClip = imageCursorOn
 				else:
 					if imageCursorOff == None:
-						imageCursorOff = tty2img.tty2img(screen, showCursor=False, **renderOptions)
+						imageCursorOff = tty2img(screen, showCursor=False, **renderOptions)
 						imageCursorOff = mpy.ImageClip(numpy.array( imageCursorOff ))
 					imageClip = imageCursorOff
 				cursor += 1
 			else:
-				imageClip = mpy.ImageClip(numpy.array( tty2img.tty2img(screen, **renderOptions) ))
+				imageClip = mpy.ImageClip(numpy.array( tty2img(screen, **renderOptions) ))
 				duration  = endTime-startTime
 				startTime = endTime
 			# subframe rendering
@@ -197,7 +195,7 @@ def asciicast2video(
 		inputFrames.append( (frame[0], frame[-1]) )
 	
 	# calculate memory needs
-	frameSize = tty2img.tty2img(screen, **renderOptions).size
+	frameSize = tty2img(screen, **renderOptions).size
 	frameSize = frameSize[0] * frameSize[1] * 4
 	frameCount = len(inputFrames)
 	if blinkingCursor:

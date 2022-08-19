@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from genericpath import isfile
 import asciinema
-import asciicast2movie
+from .asciicast2movie import asciicast2video
 import argparse
 import os
+import sys
 
 def main():
 	# Parse args when command was run
@@ -27,6 +27,7 @@ def main():
 	tmpfile = args['output'][:-3] + "cast"
 	outputfile = args['output']
 	fps = args['fps']
+	keepCast = args['cast']
 
 	# Check if the file already exists
 	if args['force'] == False and os.path.isfile(outputfile) == True:
@@ -38,14 +39,16 @@ def main():
 	asciinema.record_asciicast(tmpfile)
 
 	# Convert asciicast to mp4
-	video = asciicast2movie.asciicast2video(tmpfile, blinkingCursor=0.5, renderOptions={'fontSize':12}, continueOnLowMem=None)
+	video = asciicast2video(tmpfile, blinkingCursor=0.5, renderOptions={'fontSize':12}, continueOnLowMem=None)
 	video.write_videofile(outputfile, fps=fps)
 
 	# Remove the cast file if --cast option was not added
-	if outputfile == False:
+	if keepCast == False:
 		# Checks if the file exists
 		if os.path.isfile(tmpfile):
 			os.remove(tmpfile)
 
 
 main()
+
+sys.exit()
